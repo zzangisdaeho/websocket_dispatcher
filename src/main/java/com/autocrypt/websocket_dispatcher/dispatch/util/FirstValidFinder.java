@@ -37,7 +37,7 @@ public interface FirstValidFinder<T> {
                             log.info("✅ Valid result found: {}", value);
                             result.complete(value);
                         } else {
-                            log.debug("⚠️ Result already completed, ignoring value: {}", value);
+                            log.debug("⚠️ ignoring value: {}", value);
                         }
                     }).exceptionally(ex -> {
                         log.warn("⚠️ Future execution failed: {}", ex.getMessage(), ex);

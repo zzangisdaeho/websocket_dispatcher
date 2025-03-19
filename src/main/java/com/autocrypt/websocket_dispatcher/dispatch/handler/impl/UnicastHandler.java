@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 /**
  * 김대호
@@ -21,7 +22,7 @@ public class UnicastHandler extends AbstractDispatchHandler {
     private final SessionRepository sessionRepository;
     private final FirstValidFinder<String> firstValidFinder;
     //커넥션 대상이 붙어있을 수 있는 ws 서버 그룹
-    private static final List<String> PREFIXES = List.of("user:", "car:");
+    private static final List<String> PREFIXES = List.of("USER:", "CAR:");
 
     public UnicastHandler(PublishChannel publishChannel, SessionRepository sessionRepository, FirstValidFinder<String> firstValidFinder) {
         super(publishChannel);
@@ -46,8 +47,15 @@ public class UnicastHandler extends AbstractDispatchHandler {
 
         // 첫 번째 유효한 값 찾기
         CompletableFuture<String> firstValidFuture = firstValidFinder.findFirstValid(futures);
-        ChannelRequest channelRequest = dispatchMessage.generateChannelRequest(firstValidFuture.join());
+        String connectedWSServerId;
+        try{
+            connectedWSServerId = firstValidFuture.join();
+        }catch (CompletionException e){
+            log.warn("target do not attached to ws sever. do not send");
+            return;
+        }
 
+        ChannelRequest channelRequest = dispatchMessage.generateChannelRequest(connectedWSServerId);
         publishChannel.publish(channelRequest);
     }
 
