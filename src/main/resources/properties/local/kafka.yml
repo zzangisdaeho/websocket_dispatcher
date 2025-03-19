@@ -1,0 +1,9 @@
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      group-id: websocket-dispatcher
+    bootstrap-servers:
+      - localhost:29092
+      - localhost:39092
+      - localhost:49092

@@ -1,0 +1,6 @@
+spring:
+  config:
+    import:
+      - classpath:properties/local/logging.yml
+      - classpath:properties/local/redis.yml
+      - classpath:properties/local/kafka.yml

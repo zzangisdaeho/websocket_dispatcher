@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: websocket_dispatcher
+
+#service:
+#  prefix: ${SERVICE.PREFIX}
+
+
+
+
+
